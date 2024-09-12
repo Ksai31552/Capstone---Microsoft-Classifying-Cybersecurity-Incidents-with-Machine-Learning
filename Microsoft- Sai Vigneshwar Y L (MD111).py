@@ -228,8 +228,14 @@ print("Average Cross-Validation Score:", np.mean(cv_scores))
 
 ''' Step 5 & 6 : Model Evaluation and Tuning  &  Model Interpretation'''
 
-# Predict on the validation set
-y_val_pred = logistic_regression_model.predict(X_val)
+# Instantiate the Random Forest model
+random_forest_model = RandomForestClassifier(random_state=42)
+
+# Fit the model on training data (assuming X_train and y_train are defined)
+random_forest_model.fit(X_train, y_train)
+
+
+y_val_pred = random_forest_model.predict(X_val)
 
 # Generate a classification report
 report = classification_report(y_val, y_val_pred, target_names=['TP', 'BP', 'FP'])
@@ -245,3 +251,20 @@ print(report)
 print(f"Macro-F1 Score: {macro_f1:.2f}")
 print(f"Macro Precision: {precision:.2f}")
 print(f"Macro Recall: {recall:.2f}")
+
+
+# Calculate precision, recall, and F1-score for each class
+precision = precision_score(y_val, y_val_pred, average=None, labels=['TP', 'BP', 'FP'])
+recall = recall_score(y_val, y_val_pred, average=None, labels=['TP', 'BP', 'FP'])
+f1 = f1_score(y_val, y_val_pred, average=None, labels=['TP', 'BP', 'FP'])
+
+# Calculate macro F1-score (average of F1 scores for all classes)
+macro_f1 = f1_score(y_val, y_val_pred, average='macro')
+
+print("Precision for each class:", precision)
+print("Recall for each class:", recall)
+print("F1-Score for each class:", f1)
+print("Macro F1-Score:", macro_f1)
+
+# Generate a detailed classification report
+print(classification_report(y_val, y_val_pred, target_names=['TP', 'BP', 'FP']))
